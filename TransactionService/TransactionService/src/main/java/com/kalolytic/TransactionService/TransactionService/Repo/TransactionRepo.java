@@ -7,11 +7,14 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface TransactionRepo extends JpaRepository<Transaction,UUID> {
-    List<Transaction> findByFromAccountNo(String fromAccountNo);
 
-    List<Transaction> findByCustomerIdAndFromAccountNo(UUID customerId, String fromAccountNo);
+    List<Transaction> findAllByFromAccountNo(String fromAccountNo);
+    List<Transaction> findAllByToAccountNo(String toAccountNo);
+    List<Transaction> findAllByCustomerId(UUID customerId);
+
 }

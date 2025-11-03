@@ -1,9 +1,7 @@
 package com.kalolytic.customerService.CustomerService.service;
 
 
-import com.kalolytic.customerService.CustomerService.DTO.CustomerDTO;
-import com.kalolytic.customerService.CustomerService.controller.ResponseStructure;
-import org.springframework.http.ResponseEntity;
+import com.kalolytic.commonModel.CommonModel.DTO.CustomerDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +14,7 @@ public interface CustomerService {
 
     List<CustomerDTO> getAllCustomers();
 
-    String deleteCustomer(UUID id);
+    CustomerDTO deleteCustomer(UUID id);
 
     boolean existCustomer(UUID id);
 

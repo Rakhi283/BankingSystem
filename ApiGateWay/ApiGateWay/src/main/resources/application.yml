@@ -1,0 +1,11 @@
+server:
+  port: 8084
+
+spring:
+  main:
+    web-application-type: reactive   # Important for Gateway
+  application:
+    name: ApiGateway                 # Use ':' not '='
+  cloud:
+    compatibility-verifier:
+      enabled: false

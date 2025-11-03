@@ -1,8 +1,12 @@
 package com.kalolytic.accountService.AccountService.Service;
 
-import com.kalolytic.accountService.AccountService.DTO.AccountDTO;
-import com.kalolytic.commonModel.CommonModel.response.ResponseStructure;
-import org.springframework.http.ResponseEntity;
+
+
+import com.kalolytic.commonModel.CommonModel.DTO.AccountDTO;
+import com.kalolytic.commonModel.CommonModel.DTO.AccountUpdateDTO;
+import com.kalolytic.commonModel.CommonModel.DTO.AccountWithoutCustomerDTO;
+import com.kalolytic.commonModel.CommonModel.RequestDTO.AccountVerificationRequest;
+import com.kalolytic.commonModel.CommonModel.RequestDTO.AccountBalanceChangeRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,13 +15,19 @@ public interface AccountService {
 
     AccountDTO create(AccountDTO dto);
 
-    AccountDTO getById(UUID id);
+    AccountWithoutCustomerDTO getById(UUID id);
 
     List<AccountDTO> getByCustomer(UUID customerId);
 
-    AccountDTO updateAccount(UUID id, AccountDTO dto);
+    AccountUpdateDTO updateAccount(UUID id, AccountUpdateDTO dto);
 
     String deleteAccount(UUID id);
 
-    boolean accountBelongsToCustomer(UUID accountId, UUID customerId);
+    boolean accountBelongsToCustomer(AccountVerificationRequest request);
+
+    AccountBalanceChangeRequest creditAmount(AccountBalanceChangeRequest transaction);
+
+    AccountBalanceChangeRequest DebitAmount(AccountBalanceChangeRequest transaction);
+
+    List<AccountWithoutCustomerDTO> getAllAccounts();
 }

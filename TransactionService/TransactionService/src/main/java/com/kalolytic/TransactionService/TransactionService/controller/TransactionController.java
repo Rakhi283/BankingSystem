@@ -1,8 +1,13 @@
 package com.kalolytic.TransactionService.TransactionService.controller;
 
-import com.kalolytic.TransactionService.TransactionService.DTO.TransactionDTO;
+
 import com.kalolytic.TransactionService.TransactionService.service.TransactionService;
+import com.kalolytic.commonModel.CommonModel.DTO.TransactionDTO;
+import com.kalolytic.commonModel.CommonModel.RequestDTO.TransactionRequestDTO;
 import com.kalolytic.commonModel.CommonModel.response.ResponseStructure;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,46 +23,48 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping
-    public ResponseEntity<ResponseStructure<TransactionDTO>> createTransaction(@RequestBody TransactionDTO dto) {
-        TransactionDTO created = transactionService.createTransaction(dto);
-        ResponseStructure<TransactionDTO> response = new ResponseStructure<>(
-                "Transaction created successfully", HttpStatus.CREATED.toString(), created);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
+
+    @PostMapping("/transfer")
+    public ResponseEntity<ResponseStructure<TransactionDTO>> transfer(@Valid @RequestBody TransactionRequestDTO request) {
+        log.info("Transfer API called: {}", request);
+        TransactionDTO dto = transactionService.createTransaction(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ResponseStructure<>("Transaction completed", "SUCCESS", dto));
     }
+
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseStructure<TransactionDTO>> getTransactionById(@PathVariable UUID id) {
+    public ResponseEntity<ResponseStructure<TransactionDTO>> getById(@PathVariable UUID id){
         TransactionDTO dto = transactionService.getTransactionById(id);
-        ResponseStructure<TransactionDTO> response = new ResponseStructure<>(
-                "Transaction fetched successfully", HttpStatus.OK.toString(), dto);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ResponseStructure<>("Transaction fetched", "SUCCESS", dto));
     }
 
-    @GetMapping("/account/{accountNo}")
-    public ResponseEntity<ResponseStructure<List<TransactionDTO>>> getTransactionsByAccount(@PathVariable String accountNo) {
-        List<TransactionDTO> list = transactionService.getTransactionsByAccountNo(accountNo);
-        ResponseStructure<List<TransactionDTO>> response = new ResponseStructure<>(
-                "Transactions fetched successfully", HttpStatus.OK.toString(), list);
-        return ResponseEntity.ok(response);
+
+    @GetMapping("/account/{accountNumber}")
+    public ResponseEntity<ResponseStructure<List<TransactionDTO>>> getByAccount(@PathVariable String accountNumber){
+        List<TransactionDTO> list = transactionService.getTransactionsByAccount(accountNumber);
+        return ResponseEntity.ok(new ResponseStructure<>("Transactions fetched", "SUCCESS", list));
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseStructure<List<TransactionDTO>>> getAllTransactions() {
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<ResponseStructure<List<TransactionDTO>>> getByCustomer(@PathVariable UUID customerId){
+        List<TransactionDTO> list = transactionService.getTransactionsByCustomer(customerId);
+        return ResponseEntity.ok(new ResponseStructure<>("Transactions fetched", "SUCCESS", list));
+    }
+
+
+    @GetMapping("/get/all")
+    public ResponseEntity<ResponseStructure<List<TransactionDTO>>> getAll(){
         List<TransactionDTO> list = transactionService.getAllTransactions();
-        ResponseStructure<List<TransactionDTO>> response = new ResponseStructure<>(
-                "All transactions fetched successfully", HttpStatus.OK.toString(), list);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ResponseStructure<>("All transactions", "SUCCESS", list));
     }
 
-    @GetMapping("/customer/{customerId}/account/{accountNo}")
-    public ResponseEntity<ResponseStructure<List<TransactionDTO>>> getTransactionsByCustomerAndAccount(
-            @PathVariable UUID customerId,
-            @PathVariable String accountNo) {
 
-        List<TransactionDTO> list = transactionService.getTransactionsByCustomerAndAccount(customerId, accountNo);
-        ResponseStructure<List<TransactionDTO>> response = new ResponseStructure<>(
-                "Transactions fetched successfully", HttpStatus.OK.toString(), list);
-        return ResponseEntity.ok(response);
+    @PostMapping("/{id}/reverse")
+    public ResponseEntity<ResponseStructure<TransactionDTO>> reverse(@PathVariable UUID id, @RequestParam(required = false) String reason){
+        TransactionDTO dto = transactionService.reverseTransaction(id, reason);
+        return ResponseEntity.ok(new ResponseStructure<>("Transaction reversed", "SUCCESS", dto));
     }
 }

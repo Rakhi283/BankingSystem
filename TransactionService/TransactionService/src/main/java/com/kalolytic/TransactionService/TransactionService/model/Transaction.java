@@ -1,31 +1,32 @@
 package com.kalolytic.TransactionService.TransactionService.model;
 
+import com.kalolytic.commonModel.CommonModel.enums.TransactionStatus;
+import com.kalolytic.commonModel.CommonModel.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID transId;
+    private UUID id;
+    private UUID customerId;
     private String fromAccountNo;
     private String toAccountNo;
-    private BigDecimal amount;
-    private UUID customerId;
-
-//    @Enumerated(EnumType.STRING)
-//    private TransactionType type;
-
-    private Instant timestamp;
-//    private TransactionStatus status;
-
+    private Double amount;
+    private String remarks;
+    private TransactionType type; // TRANSFER, DEBIT, CREDIT
+    private TransactionStatus status; // PENDING, SUCCESS, FAILED, REVERSED
+    private LocalDateTime timestamp;
+    private String failureReason;
 }

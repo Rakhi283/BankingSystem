@@ -1,7 +1,7 @@
 package com.kalolytic.customerService.CustomerService.Mapper;
 
 
-import com.kalolytic.customerService.CustomerService.DTO.CustomerDTO;
+import com.kalolytic.commonModel.CommonModel.DTO.CustomerDTO;
 import com.kalolytic.customerService.CustomerService.model.Customer;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +28,7 @@ public class CustMapper {
       dto.setEmail(entity.getEmail());
       dto.setPassword(entity.getPassword());
       dto.setPhoneNumber(entity.getPhoneNumber());
+
       return dto;
   }
 }

@@ -1,29 +1,26 @@
 package com.kalolytic.TransactionService.TransactionService.mapper;
 
-import com.kalolytic.TransactionService.TransactionService.DTO.TransactionDTO;
 import com.kalolytic.TransactionService.TransactionService.model.Transaction;
+import com.kalolytic.commonModel.CommonModel.DTO.TransactionDTO;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TransactionMapper {
 
-    public TransactionDTO toDTO(Transaction entity) {
+    public static TransactionDTO toDTO(Transaction t) {
+        if (t == null) return null;
         TransactionDTO dto = new TransactionDTO();
-        dto.setAmount(entity.getAmount());
-        dto.setTimestamp(entity.getTimestamp());
-        dto.setTransId(entity.getTransId());
-        dto.setFromAccountNo(entity.getFromAccountNo());
-        dto.setToAccountNo(entity.getToAccountNo());
+        dto.setId(t.getId());
+        dto.setCustomerId(t.getCustomerId());
+        dto.setFromAccountNo(t.getFromAccountNo());
+        dto.setToAccountNo(t.getToAccountNo());
+        dto.setAmount(t.getAmount());
+        dto.setRemarks(t.getRemarks());
+        dto.setType(t.getType() == null ? null : t.getType().name());
+        dto.setStatus(t.getStatus() == null ? null : t.getStatus().name());
+        dto.setTimestamp(t.getTimestamp());
+        dto.setFailureReason(t.getFailureReason());
         return dto;
     }
 
-    public Transaction toEntity(TransactionDTO dto) {
-        Transaction entity = new Transaction();
-       entity.setAmount(dto.getAmount());
-       entity.setTimestamp(dto.getTimestamp());
-       entity.setTransId(dto.getTransId());
-       entity.setFromAccountNo(dto.getFromAccountNo());
-       entity.setToAccountNo(dto.getToAccountNo());
-        return entity;
-    }
 }
